@@ -5,10 +5,9 @@ import com.db.common.enums.DataServerStateEnum;
 import com.db.common.enums.ErrorCodeEnum;
 import com.db.common.exception.BusinessException;
 
-import lombok.extern.slf4j.Slf4j;
-
-
 import java.io.Serializable;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @Description: DataServer基本数据结构
@@ -29,7 +28,7 @@ public class DataServer implements Serializable {
     private static final String HOST_URL_REGEX = "(\\d+\\.\\d+\\.\\d+\\.\\d+)\\:(\\d+)";
 
     /**
-     * 解析url:ip，如127.0.0.1:2345
+     * 解析url:ip，如127.0.0.1:12345
      */
     public void parseHostUrl() {
         if (hostUrl == null || hostUrl.equals("")) {
@@ -106,5 +105,4 @@ public class DataServer implements Serializable {
             log.warn("{}的配偶是{}", this.hostName, server.hostName);
         }
     }
-
 }

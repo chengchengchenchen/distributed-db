@@ -16,7 +16,7 @@ public class MasterConstant {
     /**
      * 发送RPC请求到Master Server需要访问的Port
      */
-    public static final Integer MASTER_SERVER_PORT = 2345;
+    public static final Integer MASTER_SERVER_PORT = 12345;
 
     /**
      * MASTER主机名
