@@ -1,5 +1,7 @@
 package com.db.master;
 
+import com.db.master.service.ZK;
+
 public class MasterRunner {
     /**
      * Master Server
@@ -13,7 +15,14 @@ public class MasterRunner {
      * 设计两个线程，第一个线程在启动时向ZooKeeper发送请求，获得ZNODE目录下的信息并且持续监控，如果发生了目录的变化则执行回调函数，处理相应策略。
      * 策略主要包含两个方面，分别是3、5。第二个线程负责监听RPC端口，接收客户端的请求，返回需要的元数据。
      */
-    public static void main(String[] args){
+    private static final ZK zkThread = new ZK();
 
+    public static void main(String[] args){
+        // 第一个线程在启动时向ZooKeeper发送请求，获得ZNODE目录下的信息并且持续监控，如果发生了目录的变化则执行回调函数，处理相应策略。
+        Thread zkServiceThread = new Thread(zkThread);
+        zkServiceThread.start();
+
+        // 主线程：
+        //TODO: RPC
     }
 }

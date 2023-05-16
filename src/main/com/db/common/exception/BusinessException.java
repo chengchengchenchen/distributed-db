@@ -9,10 +9,10 @@ import com.db.common.enums.ErrorCodeEnum;
 public class BusinessException extends RuntimeException {
 
     //业务异常编码
-    private int code;
+    public int code;
 
     //业务异常信息
-    private String message;
+    public String message;
 
     public BusinessException() {
         super();
