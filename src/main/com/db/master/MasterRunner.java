@@ -1,6 +1,11 @@
 package com.db.master;
 
+import com.db.master.service.Executor;
 import com.db.master.service.ZK;
+
+import java.util.Scanner;
+
+import static java.lang.Thread.sleep;
 
 public class MasterRunner {
     /**
@@ -19,10 +24,28 @@ public class MasterRunner {
 
     public static void main(String[] args){
         // 第一个线程在启动时向ZooKeeper发送请求，获得ZNODE目录下的信息并且持续监控，如果发生了目录的变化则执行回调函数，处理相应策略。
-        Thread zkServiceThread = new Thread(zkThread);
-        zkServiceThread.start();
+        try{
+            Thread zkServiceThread = new Thread(zkThread);
+            zkServiceThread.start();
+            // 主线程：
+            //TODO: RPC
+            String a="";
+            while(!a.equals("quit")){
+                Scanner scanner = new Scanner(System.in);
+                a =scanner.next ();// 输入
+                if(a.equals("quit")){
+                    zkServiceThread.interrupt();
+                    sleep(1000);
+                }
+            }
+            System.exit(0);
+        }catch (Exception e){
+            e.getStackTrace();
+        }
 
-        // 主线程：
-        //TODO: RPC
+
+
+
+
     }
 }

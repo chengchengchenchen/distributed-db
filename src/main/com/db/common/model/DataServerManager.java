@@ -2,6 +2,8 @@ package com.db.common.model;
 
 import com.db.common.constant.MasterConstant;
 import com.db.common.enums.DataServerStateEnum;
+import com.db.common.enums.ErrorCodeEnum;
+import com.db.common.exception.BusinessException;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.*;
@@ -12,7 +14,7 @@ public class DataServerManager {
 
     public static Map<String, DataServer> dataServers = new HashMap<>();
 
-    //public static List<TableMeta> tableMetaList = new LinkedList<>();
+    public static List<TableMeta> tableMetaList = new LinkedList<>();
 
     public static void addServer(String hostName, String hostUrl) {
         DataServer dataServer = new DataServer();
@@ -26,7 +28,6 @@ public class DataServerManager {
         dataServers.put(hostName, dataServer);
     }
 
-    //TODO: MetaTable
     public static void read() throws IOException, ClassNotFoundException {
         File file = new File(MasterConstant.META_INFO_STORAGE_FILE);
         if (!file.exists()) {
@@ -36,15 +37,16 @@ public class DataServerManager {
         }
         ObjectInputStream in = new ObjectInputStream(new FileInputStream(file));
         dataServers = (Map<String, DataServer>) in.readObject();
-        log.warn("从文件{}中读取对象{}", MasterConstant.META_INFO_STORAGE_FILE, dataServers);
+        tableMetaList = (List<TableMeta>) in.readObject();
+        log.warn("从文件{}中读取对象{}和{}", MasterConstant.META_INFO_STORAGE_FILE, dataServers, tableMetaList);
         in.close();
     }
 
-    //TODO: MetaTable
     public static void write() throws IOException {
         ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(MasterConstant.META_INFO_STORAGE_FILE));
         out.writeObject(dataServers);
-        log.warn("将对象{}写入到文件{}中", dataServers, MasterConstant.META_INFO_STORAGE_FILE);
+        out.writeObject(tableMetaList);
+        log.warn("将对象{}和{}写入到文件{}中", dataServers, tableMetaList, MasterConstant.META_INFO_STORAGE_FILE);
         out.close();
     }
 
@@ -56,7 +58,6 @@ public class DataServerManager {
         }
         return null;
     }
-
 
     public static Integer getServerNumByState(DataServerStateEnum state) {
         Integer num = 0;
@@ -127,4 +128,58 @@ public class DataServerManager {
             //TODO:RPC
         }
     }
+
+    /**
+     * 根据name找到table；若未找到，返回null
+     */
+    public static TableMeta findTable(String name) {
+        for (TableMeta item : tableMetaList) {
+            if (item.name.equals(name)) {
+                return item;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * 增加TableMeta
+     */
+    public static void addTableMata(TableMeta tableMeta) {
+        if (findTable(tableMeta.name) != null || tableMetaList.contains(tableMeta)) {
+            throw new BusinessException(ErrorCodeEnum.FAIL.getCode(), "该表格已经存在");
+        } else {
+            tableMetaList.add(tableMeta);
+        }
+    }
+
+    /**
+     * 删除TableMeta
+     */
+    public static void removeTableMeta(String tableName) {
+        tableMetaList.removeIf(tableMeta -> tableMeta.name.equals(tableName));
+    }
+
+    /**
+     * 根据负载均衡返回合适的dataServer的ID
+     */
+    public static Integer allocateLocatedServer() {
+        // 得到主件机组成的列表
+        List<DataServer> primaryServers = dataServers.values()
+                .stream()
+                .filter(server -> server.state == DataServerStateEnum.PRIMARY).toList();
+
+        // 使用TreeMap来存储每个主件机的表格数量，键为数量，值为ID
+        TreeMap<Integer, Integer> tableCounts = new TreeMap<>();
+        for (DataServer server : primaryServers) {
+            int tableCount = 0;
+            for (TableMeta tableMeta : tableMetaList) {
+                if (tableMeta.locatedServerName.equals(server.hostName)) {
+                    tableCount++;
+                }
+            }
+            tableCounts.put(tableCount, server.id);
+        }
+
+        // 返回表格数量最小的主件机的ID
+        return tableCounts.firstEntry().getValue();
 }

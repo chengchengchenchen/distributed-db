@@ -27,6 +27,7 @@ public class Executor implements AutoCloseable {
 
     public Executor() {
         try {
+            //log.warn("读取");
             DataServerManager.read();
         } catch (IOException | ClassNotFoundException e) {
             log.warn(e.getMessage(), e);
@@ -34,6 +35,7 @@ public class Executor implements AutoCloseable {
         // register a cleaning action
         cleanable = cleaner.register(this, () -> {
             try {
+                //log.warn("写入");
                 DataServerManager.write();
             } catch (IOException e) {
                 log.warn(e.getMessage(), e);

@@ -1,5 +1,6 @@
 package com.db.master.service;
 
+import com.db.common.enums.DataServerStateEnum;
 import com.db.common.enums.ErrorCodeEnum;
 import com.db.common.enums.StrategyTypeEnum;
 import com.db.common.exception.BusinessException;
@@ -7,20 +8,38 @@ import com.db.common.model.DataServer;
 import com.db.common.model.DataServerManager;
 import lombok.extern.slf4j.Slf4j;
 
+import java.io.IOException;
+import java.lang.ref.Cleaner;
+
 /**
  * @Description: 根据ZooKeeper监视器得到的各种事件实行相应的策略
  * @Author: qjc
  * @Date: 2023/5/15 15:50
  */
 @Slf4j
-public class Manager {
+public class Manager implements AutoCloseable{
+    private static final Cleaner cleaner = Cleaner.create();
 
+    private final Cleaner.Cleanable cleanable;
     Executor executor;
 
     public Manager() {
         executor = new Executor();
-    }
+        // register a cleaning action
+        cleanable = cleaner.register(this, () -> {
+            try {
+                DataServerManager.write();
+            } catch (IOException e) {
+                log.warn(e.getMessage(), e);
+            }
+        });
 
+    }
+    @Override
+    public void close() {
+        // invoke the cleaning action
+        cleanable.clean();
+    }
     /**
      * 处理服务器节点出现事件
      */

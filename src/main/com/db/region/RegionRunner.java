@@ -19,7 +19,6 @@ public class RegionRunner {
      */
     public static void main(String[] args){
         // 线程1：在应用启动的时候自动将本机的Host信息注册到ZooKeeper，然后阻塞，直到应用退出的时候也同时退出
-        log.warn("test");
         Thread zkServiceThread = new Thread(zkThread);
         zkServiceThread.start();
 

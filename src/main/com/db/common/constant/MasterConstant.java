@@ -11,7 +11,7 @@ public class MasterConstant {
      * 发送RPC请求到Master Server需要访问的IP,
      * TODO：部署时修改为真实的
      */
-    public static final String MASTER_SERVER_IP = "192.168.43.194";
+    public static final String MASTER_SERVER_IP = "127.0.0.1";
 
     /**
      * 发送RPC请求到Master Server需要访问的Port
