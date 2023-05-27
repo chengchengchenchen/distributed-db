@@ -5,6 +5,9 @@ import com.db.RPC.model.NotifyTableMetaChangeResponse;
 import com.db.RPC.model.QueryMetaTableRequest;
 import com.db.RPC.model.QueryMetaTableResponse;
 import com.db.RPC.service.MasterService;
+import com.db.common.enums.SqlQueryEnum;
+import com.db.common.model.DataServerManager;
+import java.io.IOException;
 
 public class MasterServiceImpl implements MasterService.Iface {
 
@@ -15,6 +18,9 @@ public class MasterServiceImpl implements MasterService.Iface {
      */
     @Override
     public QueryMetaTableResponse queryTableMeta(QueryMetaTableRequest req) throws org.apache.thrift.TException {
+
+
+
         return null;
     }
 

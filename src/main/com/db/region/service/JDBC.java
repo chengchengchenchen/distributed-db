@@ -16,6 +16,7 @@ public class JDBC {
     public static Connection con = null;
     public static Statement stat = null;
     public static DataServerStateEnum state = DataServerStateEnum.IDLE;
+    public static String dualName = "";
     public static String dualURL = "";
 
     public static void main(String[] args){

@@ -182,4 +182,5 @@ public class DataServerManager {
 
         // 返回表格数量最小的主件机的ID
         return tableCounts.firstEntry().getValue();
+    }
 }

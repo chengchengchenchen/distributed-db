@@ -1,7 +1,5 @@
 package com.db.common.model;
 
-import java.util.List;
-
 public class TableMeta {
 
     public String name;
@@ -20,6 +18,6 @@ public class TableMeta {
             return false;
         if(another == this)
             return true;
-        return name.equals(((TableMeta) another).name) && primaryKey.equals(((TableMeta) another).primaryKey));
+        return name.equals(((TableMeta) another).name) && primaryKey.equals(((TableMeta) another).primaryKey);
     }
 }

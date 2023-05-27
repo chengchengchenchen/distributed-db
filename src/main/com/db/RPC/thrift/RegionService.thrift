@@ -1,6 +1,6 @@
 include "Operation.thrift"
 
-service com.db.RPC.service.RegionService {
+service RegionService {
 
     /**
      * Client根据表格名查询表格实际数据

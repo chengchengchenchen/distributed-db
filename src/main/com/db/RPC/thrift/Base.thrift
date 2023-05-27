@@ -1,9 +1,9 @@
-struct com.db.RPC.model.Base {
+struct Base {
     1: string caller,
     2: string receiver
 }
 
-struct com.db.RPC.model.BaseResp {
+struct BaseResp {
     1: string desc,
     2: i32 code
 }

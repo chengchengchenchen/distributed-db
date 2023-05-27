@@ -3,6 +3,7 @@ package com.db.region.thirft;
 import com.db.RPC.model.*;
 import com.db.RPC.service.RegionService;
 import com.db.common.enums.DataServerStateEnum;
+import com.db.common.enums.SqlQueryEnum;
 import com.db.region.service.JDBC;
 import org.hamcrest.Condition;
 
@@ -31,7 +32,7 @@ public class RegionServiceImpl implements RegionService.Iface {
         Statement stat = JDBC.stat;
         QueryTableDataResponse response = new QueryTableDataResponse();
         ResultSetData result = new ResultSetData();
-        try{
+        try {
             ResultSet rs = stat.executeQuery(req.getSql());
             ResultSetMetaData md = rs.getMetaData();
             int columnCount = md.getColumnCount();
@@ -49,7 +50,7 @@ public class RegionServiceImpl implements RegionService.Iface {
                 rows.add(row);
             }
             result.setRows(rows);
-        }catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         response.setResultSetData(result);
@@ -68,7 +69,10 @@ public class RegionServiceImpl implements RegionService.Iface {
         int result = 0;
         try {
             result = stat.executeUpdate(req.getSql());
-            if (req.getType() <= 4) {   //传string在副本机上执行
+            if (req.getType() == SqlQueryEnum.CREATE_INDEX.ordinal() ||
+                    req.getType() == SqlQueryEnum.CREATE_TABLE.ordinal() ||
+                    req.getType() == SqlQueryEnum.DROP_INDEX.ordinal() ||
+                    req.getType() == SqlQueryEnum.DROP_TABLE.ordinal()) {   //传string在副本机上执行
                 if (JDBC.state == DataServerStateEnum.PRIMARY) {
                     //TODO: 开启主件机和副本机的socket链接
                     //changeTableData(req);
@@ -90,7 +94,7 @@ public class RegionServiceImpl implements RegionService.Iface {
             e.printStackTrace();
         }
         response.setResult(result);
-        return  response;
+        return response;
     }
 
     /**

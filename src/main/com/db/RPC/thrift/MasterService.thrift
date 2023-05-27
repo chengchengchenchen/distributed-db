@@ -1,6 +1,6 @@
 include "Operation.thrift"
 
-service com.db.RPC.service.MasterService {
+service MasterService {
 
     /**
      * Client根据表格名查询表格元数据，若不存在，则根据负载均衡返回一个Region主件机位置
