@@ -4,8 +4,6 @@ public class TableMeta {
 
     public String name;
 
-    public String primaryKey;
-
     public String locatedServerName;
 
     public String locatedServerUrl;
@@ -18,6 +16,6 @@ public class TableMeta {
             return false;
         if(another == this)
             return true;
-        return name.equals(((TableMeta) another).name) && primaryKey.equals(((TableMeta) another).primaryKey);
+        return name.equals(((TableMeta) another).name);
     }
 }
