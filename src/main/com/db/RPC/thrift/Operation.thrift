@@ -104,3 +104,33 @@ struct ExecTableCopyRequest {
 struct ExecTableCopyResponse {
     255: required Base.BaseResp baseResp
 }
+
+/**
+ * Master通知Region开启数据复制
+ */
+struct StartSchemaCopyRequest {
+    255: required Base.Base base
+}
+
+/**
+ * Region开启复制响应
+ */
+struct StartSchemaCopyResponse {
+    255: required Base.BaseResp baseResp
+}
+
+/**
+ * Region主件机向副本机发送Schema复制
+ */
+struct ExecSchemaCopyRequest {
+    1: required string name         //Schema name
+    2: required FileData.FileData fileData,     //文件数据
+    255: required Base.Base base
+}
+
+/**
+ * Region副本机table复制响应
+ */
+struct ExecSchemaCopyResponse {
+    255: required Base.BaseResp baseResp
+}

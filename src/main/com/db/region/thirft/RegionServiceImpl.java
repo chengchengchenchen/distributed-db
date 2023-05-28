@@ -5,6 +5,7 @@ import com.db.RPC.service.RegionService;
 import com.db.common.enums.DataServerStateEnum;
 import com.db.common.enums.SqlQueryEnum;
 import com.db.region.service.RegionConfig;
+import org.apache.thrift.TException;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -86,7 +87,7 @@ public class RegionServiceImpl implements RegionService.Iface {
                     e.printStackTrace();
                 }
                 //TODO:开启主件机和副本机的socket链接
-                //ExecTableCopyResponse(req);
+                //com.db.RPC.model.ExecTableCopyResponse(req);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -129,5 +130,15 @@ public class RegionServiceImpl implements RegionService.Iface {
             e.printStackTrace();
         }
         return response;
+    }
+
+    @Override
+    public StartSchemaCopyResponse startSchemaCopy(StartSchemaCopyRequest req) throws TException {
+        return null;
+    }
+
+    @Override
+    public ExecSchemaCopyResponse execSchemaCopy(ExecSchemaCopyRequest req) throws TException {
+        return null;
     }
 }

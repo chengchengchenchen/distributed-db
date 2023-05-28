@@ -1,6 +1,6 @@
 include "Operation.thrift"
 
-service RegionService {
+service com.db.RPC.service.RegionService {
 
     /**
      * Client根据表格名查询表格实际数据
@@ -15,11 +15,20 @@ service RegionService {
     /**
      * Master告知Region状态变化
      */
-    Operation.NotifyStateResponse notifyStateChange(1: Operation.NotifyStateRequest req)
+    Operation.NotifyStateResponse notifyStateChange(1: Operation.NotifyStateRequest req),
 
     /**
      * Region对table进行全量复制
      */
-    Operation.ExecTableCopyResponse execTableCopy(1: Operation.ExecTableCopyRequest req)
+    Operation.ExecTableCopyResponse execTableCopy(1: Operation.ExecTableCopyRequest req),
 
+    /**
+     * Master通知Region进行数据复制
+     */
+    Operation.StartSchemaCopyResponse startSchemaCopy(1: Operation.StartSchemaCopyRequest req)
+
+    /**
+     * Region对schema进行全量复制
+     */
+    Operation.ExecSchemaCopyResponse execSchemaCopy(1: Operation.ExecSchemaCopyRequest req)
 }

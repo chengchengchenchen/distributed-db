@@ -19,14 +19,14 @@ public class MasterService {
 
     /**
      * Client根据表格名查询表格元数据，若不存在，则根据负载均衡返回一个Region主件机位置
-     *
+     * 
      * @param req
      */
     public QueryMetaTableResponse queryTableMeta(QueryMetaTableRequest req) throws org.apache.thrift.TException;
 
     /**
      * Region向Master通知TableMeta的修改
-     *
+     * 
      * @param req
      */
     public NotifyTableMetaChangeResponse notifyTableMetaChange(NotifyTableMetaChangeRequest req) throws org.apache.thrift.TException;
@@ -120,7 +120,7 @@ public class MasterService {
         this.clientManager = clientManager;
         this.protocolFactory = protocolFactory;
       }
-      @Override
+    @Override
       public AsyncClient getAsyncClient(org.apache.thrift.transport.TNonblockingTransport transport) {
         return new AsyncClient(protocolFactory, clientManager, transport);
       }
@@ -305,7 +305,7 @@ public class MasterService {
       @Override
       public org.apache.thrift.async.AsyncMethodCallback<QueryMetaTableResponse> getResultHandler(final org.apache.thrift.server.AbstractNonblockingServer.AsyncFrameBuffer fb, final int seqid) {
         final org.apache.thrift.AsyncProcessFunction fcall = this;
-        return new org.apache.thrift.async.AsyncMethodCallback<QueryMetaTableResponse>() {
+        return new org.apache.thrift.async.AsyncMethodCallback<QueryMetaTableResponse>() { 
           @Override
           public void onComplete(QueryMetaTableResponse o) {
             queryTableMeta_result result = new queryTableMeta_result();
@@ -372,7 +372,7 @@ public class MasterService {
       @Override
       public org.apache.thrift.async.AsyncMethodCallback<NotifyTableMetaChangeResponse> getResultHandler(final org.apache.thrift.server.AbstractNonblockingServer.AsyncFrameBuffer fb, final int seqid) {
         final org.apache.thrift.AsyncProcessFunction fcall = this;
-        return new org.apache.thrift.async.AsyncMethodCallback<NotifyTableMetaChangeResponse>() {
+        return new org.apache.thrift.async.AsyncMethodCallback<NotifyTableMetaChangeResponse>() { 
           @Override
           public void onComplete(NotifyTableMetaChangeResponse o) {
             notifyTableMetaChange_result result = new notifyTableMetaChange_result();
@@ -505,8 +505,8 @@ public class MasterService {
     public static final java.util.Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
     static {
       java.util.Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new java.util.EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
-      tmpMap.put(_Fields.REQ, new org.apache.thrift.meta_data.FieldMetaData("req", org.apache.thrift.TFieldRequirementType.DEFAULT,
-              new org.apache.thrift.meta_data.StructMetaData(org.apache.thrift.protocol.TType.STRUCT, QueryMetaTableRequest.class)));
+      tmpMap.put(_Fields.REQ, new org.apache.thrift.meta_data.FieldMetaData("req", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+          new org.apache.thrift.meta_data.StructMetaData(org.apache.thrift.protocol.TType.STRUCT, QueryMetaTableRequest.class)));
       metaDataMap = java.util.Collections.unmodifiableMap(tmpMap);
       org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(queryTableMeta_args.class, metaDataMap);
     }
@@ -515,7 +515,7 @@ public class MasterService {
     }
 
     public queryTableMeta_args(
-            QueryMetaTableRequest req)
+      QueryMetaTableRequest req)
     {
       this();
       this.req = req;
@@ -568,13 +568,13 @@ public class MasterService {
     @Override
     public void setFieldValue(_Fields field, @org.apache.thrift.annotation.Nullable java.lang.Object value) {
       switch (field) {
-        case REQ:
-          if (value == null) {
-            unsetReq();
-          } else {
-            setReq((QueryMetaTableRequest)value);
-          }
-          break;
+      case REQ:
+        if (value == null) {
+          unsetReq();
+        } else {
+          setReq((QueryMetaTableRequest)value);
+        }
+        break;
 
       }
     }
@@ -583,8 +583,8 @@ public class MasterService {
     @Override
     public java.lang.Object getFieldValue(_Fields field) {
       switch (field) {
-        case REQ:
-          return getReq();
+      case REQ:
+        return getReq();
 
       }
       throw new java.lang.IllegalStateException();
@@ -598,8 +598,8 @@ public class MasterService {
       }
 
       switch (field) {
-        case REQ:
-          return isSetReq();
+      case REQ:
+        return isSetReq();
       }
       throw new java.lang.IllegalStateException();
     }
@@ -733,7 +733,7 @@ public class MasterService {
         while (true)
         {
           schemeField = iprot.readFieldBegin();
-          if (schemeField.type == org.apache.thrift.protocol.TType.STOP) {
+          if (schemeField.type == org.apache.thrift.protocol.TType.STOP) { 
             break;
           }
           switch (schemeField.id) {
@@ -742,7 +742,7 @@ public class MasterService {
                 struct.req = new QueryMetaTableRequest();
                 struct.req.read(iprot);
                 struct.setReqIsSet(true);
-              } else {
+              } else { 
                 org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
               }
               break;
@@ -889,8 +889,8 @@ public class MasterService {
     public static final java.util.Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
     static {
       java.util.Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new java.util.EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
-      tmpMap.put(_Fields.SUCCESS, new org.apache.thrift.meta_data.FieldMetaData("success", org.apache.thrift.TFieldRequirementType.DEFAULT,
-              new org.apache.thrift.meta_data.StructMetaData(org.apache.thrift.protocol.TType.STRUCT, QueryMetaTableResponse.class)));
+      tmpMap.put(_Fields.SUCCESS, new org.apache.thrift.meta_data.FieldMetaData("success", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+          new org.apache.thrift.meta_data.StructMetaData(org.apache.thrift.protocol.TType.STRUCT, QueryMetaTableResponse.class)));
       metaDataMap = java.util.Collections.unmodifiableMap(tmpMap);
       org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(queryTableMeta_result.class, metaDataMap);
     }
@@ -899,7 +899,7 @@ public class MasterService {
     }
 
     public queryTableMeta_result(
-            QueryMetaTableResponse success)
+      QueryMetaTableResponse success)
     {
       this();
       this.success = success;
@@ -952,13 +952,13 @@ public class MasterService {
     @Override
     public void setFieldValue(_Fields field, @org.apache.thrift.annotation.Nullable java.lang.Object value) {
       switch (field) {
-        case SUCCESS:
-          if (value == null) {
-            unsetSuccess();
-          } else {
-            setSuccess((QueryMetaTableResponse)value);
-          }
-          break;
+      case SUCCESS:
+        if (value == null) {
+          unsetSuccess();
+        } else {
+          setSuccess((QueryMetaTableResponse)value);
+        }
+        break;
 
       }
     }
@@ -967,8 +967,8 @@ public class MasterService {
     @Override
     public java.lang.Object getFieldValue(_Fields field) {
       switch (field) {
-        case SUCCESS:
-          return getSuccess();
+      case SUCCESS:
+        return getSuccess();
 
       }
       throw new java.lang.IllegalStateException();
@@ -982,8 +982,8 @@ public class MasterService {
       }
 
       switch (field) {
-        case SUCCESS:
-          return isSetSuccess();
+      case SUCCESS:
+        return isSetSuccess();
       }
       throw new java.lang.IllegalStateException();
     }
@@ -1058,7 +1058,7 @@ public class MasterService {
 
     public void write(org.apache.thrift.protocol.TProtocol oprot) throws org.apache.thrift.TException {
       scheme(oprot).write(oprot, this);
-    }
+      }
 
     @Override
     public java.lang.String toString() {
@@ -1116,7 +1116,7 @@ public class MasterService {
         while (true)
         {
           schemeField = iprot.readFieldBegin();
-          if (schemeField.type == org.apache.thrift.protocol.TType.STOP) {
+          if (schemeField.type == org.apache.thrift.protocol.TType.STOP) { 
             break;
           }
           switch (schemeField.id) {
@@ -1125,7 +1125,7 @@ public class MasterService {
                 struct.success = new QueryMetaTableResponse();
                 struct.success.read(iprot);
                 struct.setSuccessIsSet(true);
-              } else {
+              } else { 
                 org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
               }
               break;
@@ -1272,8 +1272,8 @@ public class MasterService {
     public static final java.util.Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
     static {
       java.util.Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new java.util.EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
-      tmpMap.put(_Fields.REQ, new org.apache.thrift.meta_data.FieldMetaData("req", org.apache.thrift.TFieldRequirementType.DEFAULT,
-              new org.apache.thrift.meta_data.StructMetaData(org.apache.thrift.protocol.TType.STRUCT, NotifyTableMetaChangeRequest.class)));
+      tmpMap.put(_Fields.REQ, new org.apache.thrift.meta_data.FieldMetaData("req", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+          new org.apache.thrift.meta_data.StructMetaData(org.apache.thrift.protocol.TType.STRUCT, NotifyTableMetaChangeRequest.class)));
       metaDataMap = java.util.Collections.unmodifiableMap(tmpMap);
       org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(notifyTableMetaChange_args.class, metaDataMap);
     }
@@ -1282,7 +1282,7 @@ public class MasterService {
     }
 
     public notifyTableMetaChange_args(
-            NotifyTableMetaChangeRequest req)
+      NotifyTableMetaChangeRequest req)
     {
       this();
       this.req = req;
@@ -1335,13 +1335,13 @@ public class MasterService {
     @Override
     public void setFieldValue(_Fields field, @org.apache.thrift.annotation.Nullable java.lang.Object value) {
       switch (field) {
-        case REQ:
-          if (value == null) {
-            unsetReq();
-          } else {
-            setReq((NotifyTableMetaChangeRequest)value);
-          }
-          break;
+      case REQ:
+        if (value == null) {
+          unsetReq();
+        } else {
+          setReq((NotifyTableMetaChangeRequest)value);
+        }
+        break;
 
       }
     }
@@ -1350,8 +1350,8 @@ public class MasterService {
     @Override
     public java.lang.Object getFieldValue(_Fields field) {
       switch (field) {
-        case REQ:
-          return getReq();
+      case REQ:
+        return getReq();
 
       }
       throw new java.lang.IllegalStateException();
@@ -1365,8 +1365,8 @@ public class MasterService {
       }
 
       switch (field) {
-        case REQ:
-          return isSetReq();
+      case REQ:
+        return isSetReq();
       }
       throw new java.lang.IllegalStateException();
     }
@@ -1500,7 +1500,7 @@ public class MasterService {
         while (true)
         {
           schemeField = iprot.readFieldBegin();
-          if (schemeField.type == org.apache.thrift.protocol.TType.STOP) {
+          if (schemeField.type == org.apache.thrift.protocol.TType.STOP) { 
             break;
           }
           switch (schemeField.id) {
@@ -1509,7 +1509,7 @@ public class MasterService {
                 struct.req = new NotifyTableMetaChangeRequest();
                 struct.req.read(iprot);
                 struct.setReqIsSet(true);
-              } else {
+              } else { 
                 org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
               }
               break;
@@ -1656,8 +1656,8 @@ public class MasterService {
     public static final java.util.Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
     static {
       java.util.Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new java.util.EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
-      tmpMap.put(_Fields.SUCCESS, new org.apache.thrift.meta_data.FieldMetaData("success", org.apache.thrift.TFieldRequirementType.DEFAULT,
-              new org.apache.thrift.meta_data.StructMetaData(org.apache.thrift.protocol.TType.STRUCT, NotifyTableMetaChangeResponse.class)));
+      tmpMap.put(_Fields.SUCCESS, new org.apache.thrift.meta_data.FieldMetaData("success", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+          new org.apache.thrift.meta_data.StructMetaData(org.apache.thrift.protocol.TType.STRUCT, NotifyTableMetaChangeResponse.class)));
       metaDataMap = java.util.Collections.unmodifiableMap(tmpMap);
       org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(notifyTableMetaChange_result.class, metaDataMap);
     }
@@ -1666,7 +1666,7 @@ public class MasterService {
     }
 
     public notifyTableMetaChange_result(
-            NotifyTableMetaChangeResponse success)
+      NotifyTableMetaChangeResponse success)
     {
       this();
       this.success = success;
@@ -1719,13 +1719,13 @@ public class MasterService {
     @Override
     public void setFieldValue(_Fields field, @org.apache.thrift.annotation.Nullable java.lang.Object value) {
       switch (field) {
-        case SUCCESS:
-          if (value == null) {
-            unsetSuccess();
-          } else {
-            setSuccess((NotifyTableMetaChangeResponse)value);
-          }
-          break;
+      case SUCCESS:
+        if (value == null) {
+          unsetSuccess();
+        } else {
+          setSuccess((NotifyTableMetaChangeResponse)value);
+        }
+        break;
 
       }
     }
@@ -1734,8 +1734,8 @@ public class MasterService {
     @Override
     public java.lang.Object getFieldValue(_Fields field) {
       switch (field) {
-        case SUCCESS:
-          return getSuccess();
+      case SUCCESS:
+        return getSuccess();
 
       }
       throw new java.lang.IllegalStateException();
@@ -1749,8 +1749,8 @@ public class MasterService {
       }
 
       switch (field) {
-        case SUCCESS:
-          return isSetSuccess();
+      case SUCCESS:
+        return isSetSuccess();
       }
       throw new java.lang.IllegalStateException();
     }
@@ -1825,7 +1825,7 @@ public class MasterService {
 
     public void write(org.apache.thrift.protocol.TProtocol oprot) throws org.apache.thrift.TException {
       scheme(oprot).write(oprot, this);
-    }
+      }
 
     @Override
     public java.lang.String toString() {
@@ -1883,7 +1883,7 @@ public class MasterService {
         while (true)
         {
           schemeField = iprot.readFieldBegin();
-          if (schemeField.type == org.apache.thrift.protocol.TType.STOP) {
+          if (schemeField.type == org.apache.thrift.protocol.TType.STOP) { 
             break;
           }
           switch (schemeField.id) {
@@ -1892,7 +1892,7 @@ public class MasterService {
                 struct.success = new NotifyTableMetaChangeResponse();
                 struct.success.read(iprot);
                 struct.setSuccessIsSet(true);
-              } else {
+              } else { 
                 org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
               }
               break;

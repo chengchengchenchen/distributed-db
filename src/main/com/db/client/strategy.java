@@ -71,7 +71,7 @@ public class strategy {
         //int ret = executeUpdate(query);
         //如果是主机则在副本机上同样执行上述语句
         //返回ret
-        //ChangeTableDataRequest req = new ChangeTableDataRequest();
+        //com.db.RPC.model.ChangeTableDataRequest req = new com.db.RPC.model.ChangeTableDataRequest();
         //req.setSql(query);
         //req.setType(1);
     }

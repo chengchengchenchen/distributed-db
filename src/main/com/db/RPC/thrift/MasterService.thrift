@@ -1,6 +1,6 @@
 include "Operation.thrift"
 
-service MasterService {
+service com.db.RPC.service.MasterService {
 
     /**
      * Client根据表格名查询表格元数据，若不存在，则根据负载均衡返回一个Region主件机位置
@@ -10,6 +10,6 @@ service MasterService {
     /**
      * Region向Master通知TableMeta的修改
      */
-    Operation.NotifyTableMetaChangeResponse notifyTableMetaChange(1: Operation.NotifyTableMetaChangeRequest req),
+    Operation.NotifyTableMetaChangeResponse notifyTableMetaChange(1: Operation.NotifyTableMetaChangeRequest req)
 
 }

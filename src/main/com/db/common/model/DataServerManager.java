@@ -1,5 +1,8 @@
 package com.db.common.model;
 
+import com.db.RPC.model.Base;
+import com.db.RPC.model.NotifyStateRequest;
+import com.db.RPC.model.StartSchemaCopyRequest;
 import com.db.common.constant.MasterConstant;
 import com.db.common.enums.DataServerStateEnum;
 import com.db.common.enums.ErrorCodeEnum;
@@ -8,6 +11,8 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.io.*;
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Slf4j
 public class DataServerManager {
@@ -114,6 +119,39 @@ public class DataServerManager {
         server.remakePair(singleServer);
 
         //TODO:RPC
+
+        // 建立一个目标是server服务器的客户端
+        // RegionServiceClient client = new RegionServiceClient(com.db.RPC.service.RegionService.Client.class, server.getIp(), server.getPort());
+        NotifyStateRequest req = new NotifyStateRequest()
+                .setBase(new Base()
+                        .setCaller(MasterConstant.MASTER_HOST_NAME)
+                        .setReceiver(server.hostName))
+                .setStateCode(server.state.getCode())
+                .setDualServerName(singleServer.hostName)
+                .setDualServerUrl(singleServer.hostUrl);
+
+        // 通知机器状态变化
+        // client.notifyStateChange(req);
+
+        // 建立一个目标是singleServer服务器的客户端
+        // RegionServiceClient client = new RegionServiceClient(com.db.RPC.service.RegionService.Client.class, server.getIp(), server.getPort());
+        NotifyStateRequest req2 = new NotifyStateRequest()
+                .setBase(new Base()
+                        .setCaller(MasterConstant.MASTER_HOST_NAME)
+                        .setReceiver(singleServer.hostName))
+                .setStateCode(singleServer.state.getCode())
+                .setDualServerName(server.hostName)
+                .setDualServerUrl(server.hostUrl);
+
+        // 通知机器状态变化
+        // client.notifyStateChange(req);
+        log.warn("一台闲置服务器和一台孤单的机器完成结对：{}，{}", server.hostName, singleServer.hostName);
+        // 通知机器schema数据复制，注意是singleServer向server传递数据
+        StartSchemaCopyRequest req3 = new StartSchemaCopyRequest().setBase(new Base()
+                .setCaller(MasterConstant.MASTER_HOST_NAME)
+                .setCaller(singleServer.hostName));
+        //client.execSchemaCopy(req3);
+        log.warn("从服务器{}向服务器{}完成数据复制", singleServer.hostName, server.hostName);
     }
 
     /**
@@ -126,6 +164,28 @@ public class DataServerManager {
         }else{
             server.makePair(server2);
             //TODO:RPC
+            NotifyStateRequest req = new NotifyStateRequest()
+                    .setBase(new Base()
+                            .setCaller(MasterConstant.MASTER_HOST_NAME)
+                            .setReceiver(server.hostName))
+                    .setStateCode(server.state.getCode())
+                    .setDualServerName(server2.hostName)
+                    .setDualServerUrl(server2.hostUrl);
+            // 建立一个目标是server服务器的客户端
+            // RegionServiceClient client = new RegionServiceClient(com.db.RPC.service.RegionService.Client.class, server.getIp(), server.getPort());
+            // client.notifyStateChange(req);
+            NotifyStateRequest req2 = new NotifyStateRequest()
+                    .setBase(new Base()
+                            .setCaller(MasterConstant.MASTER_HOST_NAME)
+                            .setReceiver(server2.hostName))
+                    .setStateCode(server2.state.getCode())
+                    .setDualServerName(server.hostName)
+                    .setDualServerUrl(server.hostUrl);
+            // 建立一个目标是server2服务器的客户端
+            // RegionServiceClient client = new RegionServiceClient(com.db.RPC.service.RegionService.Client.class, server.getIp(), server.getPort());
+            // client.notifyStateChange(req2);
+
+            log.warn("两台闲置服务器完成结对：主机{}，副机{}", server.hostName, server2.hostName);
         }
     }
 

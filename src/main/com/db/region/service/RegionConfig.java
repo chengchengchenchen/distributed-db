@@ -30,8 +30,8 @@ public class RegionConfig {
     public static String hostURL = null;
     public static Integer port = 2335;
     public static DataServerStateEnum state = DataServerStateEnum.IDLE;
-    public static String dualName = "";
-    public static String dualURL = "";
+    public static String dualName = null;
+    public static String dualURL = null;
 
     public static void init() {
         try {
