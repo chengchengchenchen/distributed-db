@@ -2,6 +2,7 @@ package com.db.client;
 
 import com.db.RPC.model.ChangeTableDataRequest;
 import com.db.common.exception.BusinessException;
+import com.db.common.enums.SqlQueryEnum;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -67,60 +68,80 @@ public class strategy {
     }
 
     public static void createTable(String query) throws BusinessException {
-        //在JDBC建立的前提下执行
-        //int ret = executeUpdate(query);
-        //如果是主机则在副本机上同样执行上述语句
-        //返回ret
-        //com.db.RPC.model.ChangeTableDataRequest req = new com.db.RPC.model.ChangeTableDataRequest();
+        //TODO:打开client向相应table所在region的socket
+        //ChangeTableDataRequest req = new ChangeTableDataRequest();
         //req.setSql(query);
-        //req.setType(1);
+        //req.setType(SqlQueryEnum.CREATE_TABLE.ordinal());
+        //req.setName(); 这里问一下gpt怎么正则表达式获得sql指令中table的名字
+        //ChangeTableDataResponse ret = client.changeTableData(req);
+        //System.out.println("Changed" + ret.getResult() + "row.");
     }
 
     public static void createIndex(String query) throws BusinessException {
-        //在JDBC建立的前提下执行
-        //int ret = executeUpdate(query);
-        //如果是主机则在副本机上同样执行上述语句
-        //返回ret
+        //TODO:打开client向相应table所在region的socket
+        //ChangeTableDataRequest req = new ChangeTableDataRequest();
+        //req.setSql(query);
+        //req.setType(SqlQueryEnum.CREATE_INDEX.ordinal());
+        //req.setName(); 这里问一下gpt怎么正则表达式获得sql指令中table的名字
+        //ChangeTableDataResponse ret = client.changeTableData(req);
+        //System.out.println("Changed" + ret.getResult() + "row.");
     }
 
     public static void dropTable(String query) throws BusinessException {
-        //在JDBC建立的前提下执行
-        //int ret = executeUpdate(query);
-        //如果是主机则在副本机上同样执行上述语句
-        //返回ret
+        //TODO:打开client向相应table所在region的socket
+        //ChangeTableDataRequest req = new ChangeTableDataRequest();
+        //req.setSql(query);
+        //req.setType(SqlQueryEnum.DROP_TABLE.ordinal());
+        //req.setName(); 这里问一下gpt怎么正则表达式获得sql指令中table的名字
+        //ChangeTableDataResponse ret = client.changeTableData(req);
+        //System.out.println("Changed" + ret.getResult() + "row.");
     }
 
     public static void dropIndex(String query) throws BusinessException {
-        //在JDBC建立的前提下执行
-        //int ret = executeUpdate(query);
-        //如果是主机则在副本机上同样执行上述语句
-        //返回ret
+        //TODO:打开client向相应table所在region的socket
+        //ChangeTableDataRequest req = new ChangeTableDataRequest();
+        //req.setSql(query);
+        //req.setType(SqlQueryEnum.DROP_INDEX.ordinal());
+        //req.setName(); 这里问一下gpt怎么正则表达式获得sql指令中table的名字
+        //ChangeTableDataResponse ret = client.changeTableData(req);
+        //System.out.println("Changed" + ret.getResult() + "row.");
     }
 
     public static void insert(String query) throws BusinessException {
-        //在JDBC建立的前提下执行
-        //int ret = executeUpdate(query);
-        //将表格导出为sql文件传给副本机
-        //返回ret
+        //TODO:打开client向相应table所在region的socket
+        //ChangeTableDataRequest req = new ChangeTableDataRequest();
+        //req.setSql(query);
+        //req.setType(SqlQueryEnum.INSERT.ordinal());
+        //req.setName(); 这里问一下gpt怎么正则表达式获得sql指令中table的名字
+        //ChangeTableDataResponse ret = client.changeTableData(req);
+        //System.out.println("Changed" + ret.getResult() + "row.");
     }
 
     public static void delete(String query) throws BusinessException {
-        //在JDBC建立的前提下执行
-        //int ret = executeUpdate(query);
-        //将表格导出为sql文件传给副本机
-        //返回ret
+        //TODO:打开client向相应table所在region的socket
+        //ChangeTableDataRequest req = new ChangeTableDataRequest();
+        //req.setSql(query);
+        //req.setType(SqlQueryEnum.DELETE.ordinal());
+        //req.setName(); 这里问一下gpt怎么正则表达式获得sql指令中table的名字
+        //ChangeTableDataResponse ret = client.changeTableData(req);
+        //System.out.println("Changed" + ret.getResult() + "row.");
     }
 
     public static void select(String query) throws BusinessException {
-        //在JDBC建立的前提下执行
-        //ResultSet ret = executeQuery(query);
-        //返回ret
+        //TODO:打开client向相应table所在region的socket
+        //QueryTableDataRequest req = new QueryTableDataRequest();
+        //req.setSql(query);
+        //QueryTableDataResponse ret = client.queryTableData(req);
+        //输出ret.ResultSetData
     }
 
     public static void update(String query) throws BusinessException {
-        //在JDBC建立的前提下执行
-        //int ret = executeUpdate(query);
-        //将表格导出为sql文件传给副本机
-        //返回ret
+        //TODO:打开client向相应table所在region的socket
+        //ChangeTableDataRequest req = new ChangeTableDataRequest();
+        //req.setSql(query);
+        //req.setType(SqlQueryEnum.UPDATE.ordinal());
+        //req.setName(); 这里问一下gpt怎么正则表达式获得sql指令中table的名字
+        //ChangeTableDataResponse ret = client.changeTableData(req);
+        //System.out.println("Changed" + ret.getResult() + "row.");
     }
 }
