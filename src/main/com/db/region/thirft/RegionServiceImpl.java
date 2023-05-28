@@ -81,7 +81,7 @@ public class RegionServiceImpl implements RegionService.Iface {
                 try {
                     Runtime rt = Runtime.getRuntime();
                     StringBuilder str = new StringBuilder();
-                    str.append("mysqldump -h localhost -u ").append(RegionConfig.username).append(" -p").append(RegionConfig.password).append(" distributed_db ").append(req.getName()).append(">").append(System.getProperty("user.dir")).append("\\").append(req.getName()).append(".sql");
+                    str.append("cmd /k mysqldump -h localhost -u ").append(RegionConfig.username).append(" -p").append(RegionConfig.password).append(" distributed_db ").append(req.getName()).append(">").append(System.getProperty("user.dir")).append("\\").append(req.getName()).append(".sql");
                     rt.exec(str.toString());
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -124,7 +124,7 @@ public class RegionServiceImpl implements RegionService.Iface {
         try {
             Runtime rt = Runtime.getRuntime();
             StringBuilder str = new StringBuilder();
-            str.append("mysql -h localhost -u ").append(RegionConfig.username).append(" -p").append(RegionConfig.password).append(" distributed_db ").append("<").append(System.getProperty("user.dir")).append("\\").append(req.getName()).append(".sql");
+            str.append("cmd /k mysql -h localhost -u ").append(RegionConfig.username).append(" -p").append(RegionConfig.password).append(" distributed_db").append("<").append(System.getProperty("user.dir")).append("\\").append(req.getName()).append(".sql");
             rt.exec(str.toString());
         } catch (Exception e) {
             e.printStackTrace();
@@ -134,11 +134,40 @@ public class RegionServiceImpl implements RegionService.Iface {
 
     @Override
     public StartSchemaCopyResponse startSchemaCopy(StartSchemaCopyRequest req) throws TException {
-        return null;
+        StartSchemaCopyResponse res = new StartSchemaCopyResponse();
+        try {
+            Runtime rt = Runtime.getRuntime();
+            StringBuilder str = new StringBuilder();
+            str.append("cmd /k mysqldump -h localhost -u ").append(RegionConfig.username).append(" -p").append(RegionConfig.password).append(" distributed_db").append(">").append(System.getProperty("user.dir")).append("\\").append(RegionConfig.dbName).append(".sql");
+            System.out.println(str);
+            rt.exec(str.toString());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        //TODO:创建当前region向dual的socket链接
+        //初始化ExecSchemaCopyRequest
+        //execSchemaCopy(req);
+        return res;
     }
 
     @Override
     public ExecSchemaCopyResponse execSchemaCopy(ExecSchemaCopyRequest req) throws TException {
-        return null;
+        ExecSchemaCopyResponse res = new ExecSchemaCopyResponse();
+        try (FileOutputStream fos = new FileOutputStream(System.getProperty("user.dir"));
+             FileChannel channel = fos.getChannel()) {
+            channel.write(ByteBuffer.wrap(req.fileData.getFileContent()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            Runtime rt = Runtime.getRuntime();
+            StringBuilder str = new StringBuilder();
+            str.append("cmd /k mysql -h localhost -u ").append(RegionConfig.username).append(" -p").append(RegionConfig.password).append(" distributed_db").append("<").append(System.getProperty("user.dir")).append("\\").append(RegionConfig.dbName).append(".sql");
+            System.out.println(str);
+            rt.exec(str.toString());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return res;
     }
 }
