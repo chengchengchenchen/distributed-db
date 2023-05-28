@@ -76,7 +76,7 @@ public class MasterServiceImpl implements MasterService.Iface {
             if(tableMeta != null){
                 return new NotifyTableMetaChangeResponse().setBaseResp(RpcResult.hasExistedResp());
             }else{
-                //TODO:输入参数需要增加region的name和URL，需要修改一下thrift文件
+                String regionName = base.getCaller();
                 //DataServerManager.addTableMata();
             }
         }

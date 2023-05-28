@@ -26,7 +26,7 @@ public class ServerConstant {
     /**
      * 获得本机IP
      */
-    private static String getHostAddress() {
+    public static String getHostAddress() {
         String ip = null;
         try {
             ip = InetAddress.getLocalHost().getHostAddress();
