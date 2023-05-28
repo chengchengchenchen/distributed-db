@@ -16,6 +16,8 @@ import lombok.extern.slf4j.Slf4j;
  */
 
 @Slf4j
+@Data
+@Builder
 public class DataServer implements Serializable {
     public Integer id;
     public String ip;
