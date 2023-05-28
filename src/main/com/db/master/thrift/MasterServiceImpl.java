@@ -70,18 +70,30 @@ public class MasterServiceImpl implements MasterService.Iface {
         Base base = req.getBase();
         String name = req.getName();
         int type = req.getType();
+        String regionName = req.getRegionName();
+        String regionURL = req.getURL();
         log.warn("接收到对于表格元数据变更通知的请求头{}，目标表格{}，操作类型{}", base, name, type);
         if(type == SqlQueryEnum.CREATE_TABLE.ordinal()){
             TableMeta tableMeta = DataServerManager.findTable(name);
             if(tableMeta != null){
                 return new NotifyTableMetaChangeResponse().setBaseResp(RpcResult.hasExistedResp());
             }else{
-                String regionName = base.getCaller();
-                //DataServerManager.addTableMata();
+                TableMeta newTableMeta = new TableMeta(name,regionName,regionURL);
+                DataServerManager.addTableMata(newTableMeta);
+                return new NotifyTableMetaChangeResponse().setBaseResp(RpcResult.successResp());
             }
+        }else if(type == SqlQueryEnum.DROP_TABLE.ordinal()){
+            TableMeta tableMeta = DataServerManager.findTable(name);
+            if(tableMeta == null){
+                return new NotifyTableMetaChangeResponse().setBaseResp(RpcResult.notFoundResp());
+            }else{
+                DataServerManager.removeTableMeta(name);
+                return new NotifyTableMetaChangeResponse().setBaseResp(RpcResult.successResp());
+            }
+        }else{
+            log.warn("错误请求{}", type);
+            return new NotifyTableMetaChangeResponse().setBaseResp(RpcResult.failResp());
         }
-        return null;
-
     }
 
 }

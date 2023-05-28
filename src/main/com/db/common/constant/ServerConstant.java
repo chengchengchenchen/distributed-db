@@ -6,6 +6,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Random;
 
+//弃用，改为使用RegionConfig统一管理
 @Slf4j
 public class ServerConstant {
     /**

@@ -6,12 +6,14 @@ import lombok.extern.slf4j.Slf4j;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.Statement;
 import java.util.Properties;
-import com.mysql.jdbc.Driver;
-import static com.db.common.constant.ServerConstant.getHostAddress;
+import java.util.Random;
+
 
 @Slf4j
 public class RegionConfig {
@@ -24,15 +26,15 @@ public class RegionConfig {
     public static Statement stat = null;
 
     //RPC属性
-    public static String serverName = "";
-    public static String serverURL = "";
+    public static String hostName = null;
+    public static String hostURL = null;
     public static Integer port = 2335;
     public static DataServerStateEnum state = DataServerStateEnum.IDLE;
     public static String dualName = "";
     public static String dualURL = "";
 
-    public static void init(){
-        try{
+    public static void init() {
+        try {
             //配置文件
             Properties props = new Properties();
             FileInputStream in = new FileInputStream("src/main/resources/config.properties");
@@ -44,12 +46,12 @@ public class RegionConfig {
             username = props.getProperty("username");
             password = props.getProperty("password");
 
-
-            serverName = props.getProperty("serverName");
-            serverURL = getHostAddress();
+            hostName = getHostname();
             port = Integer.valueOf(props.getProperty("port"));
+            hostURL = getHostAddress() + ":" + port;
 
-            log.warn("{},{},{},{},{},{},{}",mysqlDriver,mysqlUrl,username,password,serverName,serverURL,port);
+
+            log.warn("{},{},{},{},{},{}:{}", mysqlDriver, mysqlUrl, username, password, hostName, hostURL, port);
 
             //注册驱动
             Class.forName(mysqlDriver);
@@ -57,11 +59,12 @@ public class RegionConfig {
             con = DriverManager.getConnection(mysqlUrl, username, password);
             //获取执行sql语句的对象
             stat = con.createStatement();
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
-    public static void main(String[] args){
+
+    public static void main(String[] args) {
 
         try {
             //注册驱动
@@ -100,5 +103,33 @@ public class RegionConfig {
 
     }
 
+    /**
+     * 获得本机IP
+     */
+    public static String getHostAddress() {
+        String ip = null;
+        try {
+            ip = InetAddress.getLocalHost().getHostAddress();
+        } catch (UnknownHostException e) {
+            log.warn("获取本机IP失败");
+        }
+        return ip;
+    }
 
+    /**
+     * 随机获得本机名称
+     */
+    public static String getHostname() {
+        if (hostName != null) {
+            return hostName;
+        }
+        String basicCharSet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        Random random = new Random();
+        StringBuffer sb = new StringBuffer();
+        for (int i = 0; i < 8; i++) {
+            int number = random.nextInt(basicCharSet.length());
+            sb.append(basicCharSet.charAt(number));
+        }
+        return sb.toString();
+    }
 }

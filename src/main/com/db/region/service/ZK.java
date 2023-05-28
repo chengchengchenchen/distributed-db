@@ -1,7 +1,6 @@
 package com.db.region.service;
 
 import com.db.common.constant.MasterConstant;
-import com.db.common.constant.ServerConstant;
 import com.db.common.constant.ZKConstant;
 import com.db.common.utils.CuratorClient;
 import lombok.extern.slf4j.Slf4j;
@@ -19,8 +18,8 @@ public class ZK implements Runnable {
         try {
             // 向ZooKeeper注册临时节点
             CuratorClient curatorClientHolder = new CuratorClient(MasterConstant.MASTER_SERVER_IP+":2181");
-            curatorClientHolder.createNode(ZKConstant.ZNODE + "/" + ZKConstant.HOST_NAME_PREFIX + ServerConstant.HOST_NAME,
-                    ServerConstant.HOST_URL,
+            curatorClientHolder.createNode(ZKConstant.ZNODE + "/" + ZKConstant.HOST_NAME_PREFIX + RegionConfig.hostName,
+                    RegionConfig.hostURL,
                     CreateMode.EPHEMERAL);
 
             // 阻塞该线程，直到发生异常或者主动退出

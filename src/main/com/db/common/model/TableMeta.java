@@ -9,7 +9,11 @@ public class TableMeta {
     public String locatedServerUrl;
 
     //public List<Attribute> attributes;
-
+    public TableMeta(String name, String locatedServerName, String locatedServerUrl){
+        this.name=name;
+        this.locatedServerName=locatedServerName;
+        this.locatedServerUrl=locatedServerUrl;
+    }
     @Override
     public boolean equals(Object another){
         if (! (another instanceof TableMeta))

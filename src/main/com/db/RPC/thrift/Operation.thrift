@@ -32,7 +32,7 @@ struct QueryTableDataRequest {
  * 响应体：Region返回ResultSetData
  */
 struct QueryTableDataResponse {
-    1: required ResultSetData.ResultSetData com.db.RPC.model.ResultSetData,
+    1: required ResultSetData.ResultSetData ResultSetData,
     255: required Base.BaseResp baseResp
 }
 
@@ -60,6 +60,8 @@ struct ChangeTableDataResponse {
 struct NotifyTableMetaChangeRequest {
     1: optional string name,        //table name
     2: optional i32 type,           //create || drop
+    3: required string regionName,  //region name
+    4: required string URL
     255: required Base.Base base
 }
 
