@@ -20,6 +20,7 @@ public class RegionConfig {
     //MySQL属性
     public static String mysqlDriver = "com.mysql.cj.jdbc.Driver";
     public static String mysqlUrl = "jdbc:mysql://localhost:3306/distributed_db";
+    public static String dbName = null;
     public static String username = "root";
     public static String password = "123456";
     public static Connection con = null;
@@ -43,6 +44,7 @@ public class RegionConfig {
 
             mysqlDriver = props.getProperty("mysqlDriver");
             mysqlUrl = props.getProperty("mysqlUrl");
+            dbName = props.getProperty("dbName");
             username = props.getProperty("username");
             password = props.getProperty("password");
 
@@ -84,7 +86,7 @@ public class RegionConfig {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            if (con != null) {
+            /*if (con != null) {
                 try {
                     con.close();
                 } catch (Exception e) {
@@ -97,7 +99,7 @@ public class RegionConfig {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-            }
+            }*/
         }
 
 
