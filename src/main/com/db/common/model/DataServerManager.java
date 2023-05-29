@@ -151,6 +151,9 @@ public class DataServerManager {
                 .setCaller(MasterConstant.MASTER_HOST_NAME)
                 .setCaller(singleServer.hostName));
         //client.execSchemaCopy(req3);
+        
+        //更新tableMetaList
+        updateTableMeta(singleServer,server);
         log.warn("从服务器{}向服务器{}完成数据复制", singleServer.hostName, server.hostName);
     }
 
@@ -217,6 +220,17 @@ public class DataServerManager {
      */
     public static void removeTableMeta(String tableName) {
         tableMetaList.removeIf(tableMeta -> tableMeta.name.equals(tableName));
+    }
+
+    /**
+     * 更新TableMeta所在Region
+     */
+    public static void updateTableMeta(DataServer oldServer, DataServer newServer){
+        for (TableMeta tableMeta : tableMetaList) {
+            if(tableMeta.locatedServerName.equals(oldServer.hostName)  && tableMeta.locatedServerUrl.equals(oldServer.hostUrl)){
+                addTableMata(new TableMeta(tableMeta.name, newServer.hostName, newServer.hostUrl));
+            }
+        }
     }
 
     /**
