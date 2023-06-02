@@ -34,4 +34,13 @@ public enum DataServerStateEnum {
     public String getType() {
         return type;
     }
+
+    public static DataServerStateEnum fromCode(int code) {
+        for (DataServerStateEnum stateEnum : DataServerStateEnum.values()) {
+            if (stateEnum.getCode() == code) {
+                return stateEnum;
+            }
+        }
+        throw new IllegalArgumentException("Invalid DataServerStateEnum code: " + code);
+    }
 }

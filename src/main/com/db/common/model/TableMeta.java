@@ -1,5 +1,15 @@
 package com.db.common.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
+@Data
+@Builder
+@NoArgsConstructor
 public class TableMeta {
 
     public String name;
@@ -20,6 +30,6 @@ public class TableMeta {
             return false;
         if(another == this)
             return true;
-        return name.equals(((TableMeta) another).name);
+        return name.equals(((TableMeta) another).name) && locatedServerName.equals(((TableMeta) another).locatedServerName) &&  locatedServerUrl.equals(((TableMeta) another).locatedServerUrl);
     }
 }

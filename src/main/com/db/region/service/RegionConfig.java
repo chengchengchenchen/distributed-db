@@ -51,7 +51,8 @@ public class RegionConfig {
             hostName = getHostname();
             port = Integer.valueOf(props.getProperty("port"));
             hostURL = getHostAddress() + ":" + port;
-
+            //TODO:hosturl已设定为本机
+            //hostURL = "127.0.0.1" + ":" +port;
 
             log.warn("{},{},{},{},{},{}:{}", mysqlDriver, mysqlUrl, username, password, hostName, hostURL, port);
 

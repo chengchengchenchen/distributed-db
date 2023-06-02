@@ -7,6 +7,10 @@ import com.db.common.exception.BusinessException;
 
 import java.io.Serializable;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -18,6 +22,8 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class DataServer implements Serializable {
     public Integer id;
     public String ip;

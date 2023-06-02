@@ -1,6 +1,7 @@
 package com.db.master;
 
 import com.db.master.service.Executor;
+import com.db.master.service.RpcServiceManager;
 import com.db.master.service.ZK;
 
 import java.util.Scanner;
@@ -29,6 +30,9 @@ public class MasterRunner {
             zkServiceThread.start();
             // 主线程：
             //TODO: RPC
+            RpcServiceManager rpcServiceManage = new RpcServiceManager();
+            rpcServiceManage.startService();
+
             String a="";
             while(!a.equals("quit")){
                 Scanner scanner = new Scanner(System.in);

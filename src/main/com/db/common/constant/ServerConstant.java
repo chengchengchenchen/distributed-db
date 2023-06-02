@@ -1,5 +1,6 @@
 package com.db.common.constant;
 
+import com.db.region.service.RegionConfig;
 import lombok.extern.slf4j.Slf4j;
 
 import java.net.InetAddress;
@@ -12,7 +13,7 @@ public class ServerConstant {
     /**
      * 本机主机地址
      */
-    public static String HOST_URL = getHostAddress() + ":" + RegionConstant.port;
+    public static String HOST_URL = getHostAddress() + ":" + RegionConfig.port;
 
     /**
      * 主机IP
@@ -53,4 +54,9 @@ public class ServerConstant {
         }
         return sb.toString();
     }
+    /**
+     * RPC超时时间
+     */
+    public static final Integer RPC_TIMEOUT = 40000;
+
 }

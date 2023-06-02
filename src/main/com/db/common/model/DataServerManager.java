@@ -3,6 +3,7 @@ package com.db.common.model;
 import com.db.RPC.model.Base;
 import com.db.RPC.model.NotifyStateRequest;
 import com.db.RPC.model.StartSchemaCopyRequest;
+import com.db.RPC.service.RegionService;
 import com.db.common.constant.MasterConstant;
 import com.db.common.enums.DataServerStateEnum;
 import com.db.common.enums.ErrorCodeEnum;
@@ -13,6 +14,8 @@ import java.io.*;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import com.db.master.thrift.RegionServerClient;
 
 @Slf4j
 public class DataServerManager {
@@ -122,6 +125,7 @@ public class DataServerManager {
 
         // 建立一个目标是server服务器的客户端
         // RegionServiceClient client = new RegionServiceClient(com.db.RPC.service.RegionService.Client.class, server.getIp(), server.getPort());
+        RegionServerClient regionServerClient = new RegionServerClient(RegionService.Client.class, server.getIp(), server.getPort());
         NotifyStateRequest req = new NotifyStateRequest()
                 .setBase(new Base()
                         .setCaller(MasterConstant.MASTER_HOST_NAME)
@@ -129,12 +133,17 @@ public class DataServerManager {
                 .setStateCode(server.state.getCode())
                 .setDualServerName(singleServer.hostName)
                 .setDualServerUrl(singleServer.hostUrl);
-
+        try{
+            regionServerClient.notifyStateChange(req);
+        }catch (Exception e){
+            log.warn("remakeServerPair中通知server状态变化失败");
+        }
         // 通知机器状态变化
         // client.notifyStateChange(req);
 
         // 建立一个目标是singleServer服务器的客户端
         // RegionServiceClient client = new RegionServiceClient(com.db.RPC.service.RegionService.Client.class, server.getIp(), server.getPort());
+        RegionServerClient regionServerClient1 = new RegionServerClient(RegionService.Client.class, singleServer.getIp(), singleServer.getPort());
         NotifyStateRequest req2 = new NotifyStateRequest()
                 .setBase(new Base()
                         .setCaller(MasterConstant.MASTER_HOST_NAME)
@@ -142,16 +151,27 @@ public class DataServerManager {
                 .setStateCode(singleServer.state.getCode())
                 .setDualServerName(server.hostName)
                 .setDualServerUrl(server.hostUrl);
-
+        try{
+            regionServerClient1.notifyStateChange(req2);
+        }catch (Exception e){
+            log.warn("remakeServerPair中通知singleServer状态变化失败");
+        }
         // 通知机器状态变化
         // client.notifyStateChange(req);
         log.warn("一台闲置服务器和一台孤单的机器完成结对：{}，{}", server.hostName, singleServer.hostName);
         // 通知机器schema数据复制，注意是singleServer向server传递数据
         StartSchemaCopyRequest req3 = new StartSchemaCopyRequest().setBase(new Base()
                 .setCaller(MasterConstant.MASTER_HOST_NAME)
-                .setCaller(singleServer.hostName));
-        //client.execSchemaCopy(req3);
-        
+                .setReceiver(singleServer.hostName));
+        //client.StartSchemaCopyRequest(req3);
+        //RegionServerClient regionServerClient2 = new RegionServerClient(RegionService.Client.class, server.getIp(), server.getPort());
+        try{
+            log.warn("发出startSchemaCopy指令");
+            regionServerClient1.startSchemaCopy(req3);
+        }catch (Exception e){
+            e.printStackTrace();
+            log.warn("startSchemaCopy中通知server状态变化失败");
+        }
         //更新tableMetaList
         updateTableMeta(singleServer,server);
         log.warn("从服务器{}向服务器{}完成数据复制", singleServer.hostName, server.hostName);
@@ -166,7 +186,8 @@ public class DataServerManager {
             log.warn("不存在其他闲置服务器");
         }else{
             server.makePair(server2);
-            //TODO:RPC
+            //TODO:RPC --DONE
+            RegionServerClient regionServerClient = new RegionServerClient(RegionService.Client.class, server.getIp(), server.getPort());
             NotifyStateRequest req = new NotifyStateRequest()
                     .setBase(new Base()
                             .setCaller(MasterConstant.MASTER_HOST_NAME)
@@ -174,9 +195,11 @@ public class DataServerManager {
                     .setStateCode(server.state.getCode())
                     .setDualServerName(server2.hostName)
                     .setDualServerUrl(server2.hostUrl);
-            // 建立一个目标是server服务器的客户端
-            // RegionServiceClient client = new RegionServiceClient(com.db.RPC.service.RegionService.Client.class, server.getIp(), server.getPort());
-            // client.notifyStateChange(req);
+            try{
+                regionServerClient.notifyStateChange(req);
+            }catch (Exception e){
+                log.warn("remakeServerPair中通知server状态变化失败");
+            }
             NotifyStateRequest req2 = new NotifyStateRequest()
                     .setBase(new Base()
                             .setCaller(MasterConstant.MASTER_HOST_NAME)
@@ -187,7 +210,12 @@ public class DataServerManager {
             // 建立一个目标是server2服务器的客户端
             // RegionServiceClient client = new RegionServiceClient(com.db.RPC.service.RegionService.Client.class, server.getIp(), server.getPort());
             // client.notifyStateChange(req2);
-
+            RegionServerClient regionServerClient1 = new RegionServerClient(RegionService.Client.class, server2.getIp(), server2.getPort());
+            try{
+                regionServerClient1.notifyStateChange(req2);
+            }catch (Exception e){
+                log.warn("remakeServerPair中通知server2状态变化失败");
+            }
             log.warn("两台闲置服务器完成结对：主机{}，副机{}", server.hostName, server2.hostName);
         }
     }
@@ -205,10 +233,24 @@ public class DataServerManager {
     }
 
     /**
+     * 根据name找到primary table；若未找到，返回null
+     */
+    public static TableMeta findPrimaryTable(String name) {
+        for (TableMeta item : tableMetaList) {
+            String hostname = item.locatedServerName;
+            DataServer server = dataServers.get(hostname);
+            if (item.name.equals(name) && server.state == DataServerStateEnum.PRIMARY) {
+                return item;
+            }
+        }
+        return null;
+    }
+
+    /**
      * 增加TableMeta
      */
     public static void addTableMata(TableMeta tableMeta) {
-        if (findTable(tableMeta.name) != null || tableMetaList.contains(tableMeta)) {
+        if (tableMetaList.contains(tableMeta)) {
             throw new BusinessException(ErrorCodeEnum.FAIL.getCode(), "该表格已经存在");
         } else {
             tableMetaList.add(tableMeta);
@@ -218,19 +260,33 @@ public class DataServerManager {
     /**
      * 删除TableMeta
      */
-    public static void removeTableMeta(String tableName) {
-        tableMetaList.removeIf(tableMeta -> tableMeta.name.equals(tableName));
+    public static void removeTableMeta(TableMeta t) {
+        tableMetaList.removeIf(tableMeta -> tableMeta.name.equals(t.name) && tableMeta.locatedServerName.equals(t.locatedServerName) && tableMeta.locatedServerUrl.equals(t.locatedServerUrl));
     }
 
     /**
      * 更新TableMeta所在Region
      */
     public static void updateTableMeta(DataServer oldServer, DataServer newServer){
-        for (TableMeta tableMeta : tableMetaList) {
+        int size = tableMetaList.size();
+        for (int i=0; i<size; i++) {
+            TableMeta tableMeta = tableMetaList.get(i);
             if(tableMeta.locatedServerName.equals(oldServer.hostName)  && tableMeta.locatedServerUrl.equals(oldServer.hostUrl)){
                 addTableMata(new TableMeta(tableMeta.name, newServer.hostName, newServer.hostUrl));
             }
         }
+    }
+
+    /**
+     * 查找TableMetaList
+     */
+    public static boolean isTableMetaExisted(TableMeta newTableMeta){
+        for (TableMeta tableMeta : tableMetaList) {
+            if(newTableMeta.name.equals(tableMeta.name) && newTableMeta.locatedServerName.equals(tableMeta.locatedServerName) && newTableMeta.locatedServerUrl.equals(tableMeta.locatedServerUrl)){
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -254,7 +310,39 @@ public class DataServerManager {
             tableCounts.put(tableCount, server.id);
         }
 
+        log.warn("all primary servers : {}",primaryServers);
+        log.warn("{}",tableCounts.firstEntry().getValue());
         // 返回表格数量最小的主件机的ID
         return tableCounts.firstEntry().getValue();
+    }
+    public static DataServer allocateLocatedServer2() {
+        // 得到主件机组成的列表
+        List<DataServer> primaryServers = dataServers.values()
+                .stream()
+                .filter(server -> server.state == DataServerStateEnum.PRIMARY)
+                .toList();
+
+        // 使用TreeMap来存储每个主件机的表格数量，键为数量，值为DataServer对象
+        TreeMap<Integer, DataServer> tableCounts = new TreeMap<>();
+        for (DataServer server : primaryServers) {
+            int tableCount = 0;
+            for (TableMeta tableMeta : tableMetaList) {
+                log.warn("tablemeta:{}", tableMeta);
+                if (tableMeta.locatedServerName.equals(server.hostName)) {
+                    tableCount++;
+                }
+            }
+            log.warn("服务器{}，table_count {}",server,tableCount);
+            tableCounts.put(tableCount, server);
+        }
+
+        // 获取表格数量最少的主件机对象
+        DataServer allocatedServer = tableCounts.firstEntry().getValue();
+
+        log.warn("All primary servers: {}", primaryServers);
+        log.warn("Selected server: {}", allocatedServer);
+
+        // 返回表格数量最少的主件机对象
+        return allocatedServer;
     }
 }
